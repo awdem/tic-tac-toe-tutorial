@@ -12,10 +12,7 @@ const Square = ({ value, onSquareClick }) => {
   );
 }
 
-export default function Board() {
-  const [xIsNext, setXIsNext] = useState(true);
-  const [squares, setSquares] = useState(Array(9).fill(null))
-
+const Board = ({ xIsNext, squares, onPlay }) => {
   const handleClick = (i) => {
     if (squares[i] || calculateWinner(squares)) return; // stops early if click from overwriting the filled-in square or if game is won
     const nextSquares = squares.slice();
@@ -24,8 +21,7 @@ export default function Board() {
     } else {
       nextSquares[i] = "O";      
     }
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext); // sets turn to next player
+    onPlay(nextSquares)
   }
 
   const winner = calculateWinner(squares);
@@ -57,6 +53,29 @@ export default function Board() {
       </div>
     </>
   );
+}
+
+export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)])
+  const currentSquares = history[history.length - 1]; // sets current squares to the latest element of the history array
+
+  const handlePlay = (nextSquares) => {
+    setHistory([...history, nextSquares]); // appends the new squares to the history array
+    setXIsNext(!xIsNext);
+  }
+
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+      
+    </div>
+  )
 }
 
 const calculateWinner = (squares) => {
