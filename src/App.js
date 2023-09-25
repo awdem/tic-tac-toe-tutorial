@@ -17,7 +17,7 @@ export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null))
 
   const handleClick = (i) => {
-    if (squares[i]) return; // stops a click from overwriting the filled-in square
+    if (squares[i] || calculateWinner(squares)) return; // stops early if click from overwriting the filled-in square or if game is won
     const nextSquares = squares.slice();
     if (xIsNext) { 
       nextSquares[i] = "X";
@@ -28,8 +28,18 @@ export default function Board() {
     setXIsNext(!xIsNext); // sets turn to next player
   }
 
+  const winner = calculateWinner(squares);
+  let status;
+
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Next player: " + (xIsNext? "X" : "O");
+  }
+
   return (
     <>
+      <div className="status">{status}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)}/> { /* passes an unnamed function as a prop to avoid an infinite rerender */ }
         <Square value={squares[1]} onSquareClick={() => handleClick(1)}/>
@@ -47,4 +57,25 @@ export default function Board() {
       </div>
     </>
   );
+}
+
+const calculateWinner = (squares) => {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 9],
+    [0, 4, 8],
+    [2, 4, 6],
+  ]
+
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) { // checks if all squares are the same (and not null)
+      return squares[a];
+    }
+  }
+  return null;
 }
