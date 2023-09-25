@@ -13,12 +13,19 @@ const Square = ({ value, onSquareClick }) => {
 }
 
 export default function Board() {
+  const [xIsNext, setXIsNext] = useState(true);
   const [squares, setSquares] = useState(Array(9).fill(null))
 
   const handleClick = (i) => {
+    if (squares[i]) return; // stops a click from overwriting the filled-in square
     const nextSquares = squares.slice();
-    nextSquares[i] = "X";
+    if (xIsNext) { 
+      nextSquares[i] = "X";
+    } else {
+      nextSquares[i] = "O";      
+    }
     setSquares(nextSquares);
+    setXIsNext(!xIsNext); // sets turn to next player
   }
 
   return (
