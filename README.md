@@ -12,10 +12,9 @@ Some lessons:
 
 Optional extras to implement:
 
-If you have extra time or want to practice your new React skills, here are some ideas for improvements that you could make to the tic-tac-toe game, listed in order of increasing difficulty:
-
 - [x] For the current move only, show “You are at move #…” instead of a button.
-- [ ] Rewrite Board to use two loops to make the squares instead of hardcoding them.
+- [x] Rewrite Board to use two loops to make the squares instead of hard coding them.
+	- Extra lesson about closures and scope here. Because the squares are receiving a function as a prop for onSquareClick, you can't directly reference counter, because it's not capturing counter at that instance, but rather a reference to it. That's why you needed to declare a count variable that capture the value of counter at that instance within the loop instead.
 - [ ] Add a toggle button that lets you sort the moves in either ascending or descending order.
 - [ ] When someone wins, highlight the three squares that caused the win (and when no one wins,  display a message about the result being a draw).
 - [ ] Display the location for each move in the format (row, col) in the move history list.
